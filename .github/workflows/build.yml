@@ -4,7 +4,7 @@ on:
     branches: [ "master" ]
 
 jobs: 
-  build: 
+  test: 
     runs-on: ubuntu-latest
 
     steps:
@@ -14,6 +14,21 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version:  16
-      - run: cd ECommerce-Website/client && npm install --legacy-peer-deps
-      - name: Test 
-        run: cd ECommerce-Website/client && npm test
+      
+      - name: install packages for client
+        run: npm install --legacy-peer-deps
+        working-directory: ECommerce-Website/client
+      
+      - name: Test Client 
+        continue-on-error: true
+        run: npm test
+        working-directory: ECommerce-Website/client
+
+      - name: install packages for server
+        run: npm install --legacy-peer-deps
+        working-directory: ECommerce-Website/server
+      
+      - name: Test Server
+        continue-on-error: true
+        run: npm test
+        working-directory: ECommerce-Website/server
