@@ -53,11 +53,18 @@ jobs:
         run: |
           aws ecr get-login-password --region ${{ secrets.AWS_REGION }} | docker login --username AWS --password-stdin ${{ secrets.ECR_REPOSITORY }}
 
-      - name: Build Docker image
+      - name: Build Client Docker image
         run: docker build -t ${{ secrets.ECR_REPOSITORY }}/client:latest .
         working-directory: ECommerce-Website/client
 
-      - name: Push Docker image
+      - name: Push Client Docker image
         run: docker push ${{ secrets.ECR_REPOSITORY }}/client:latest
         working-directory: ECommerce-Website/client  
   
+      - name: Build Server Docker image
+        run: docker build -t ${{ secrets.ECR_REPOSITORY }}/server:latest .
+        working-directory: ECommerce-Website/server
+
+      - name: Push Server Docker image
+        run: docker push ${{ secrets.ECR_REPOSITORY }}/server:latest
+        working-directory: ECommerce-Website/server  
