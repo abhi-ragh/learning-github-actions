@@ -10,15 +10,12 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Run ls Command
-        run: ls
-      - name: Cd into Client
-        run: cd ECommerce-Website/client
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version:  16
           cache: 'npm'
+      - run: cd ECommerce-Website/client
       - run: npm install --legacy-peer-deps
       - name: Test 
         run: npm test
