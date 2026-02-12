@@ -15,7 +15,6 @@ jobs:
         with:
           node-version:  16
           cache: 'npm'
-      - run: cd ECommerce-Website/client
-      - run: npm install --legacy-peer-deps
+      - run: cd ECommerce-Website/client && npm install --legacy-peer-deps
       - name: Test 
-        run: npm test
+        run: cd ECommerce-Website/client && npm test
