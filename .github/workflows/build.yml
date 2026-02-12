@@ -42,6 +42,22 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
 
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v3
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Log in to AWS ECR
+        run: |
+          aws ecr get-login-password --region ${{ secrets.AWS_REGION }} | docker login --username AWS --password-stdin ${{ secrets.ECR_REPOSITORY }}
+
       - name: Build Docker image
-        run: docker build -t ECommerce-Website/client .
+        run: docker build -t ${{ secrets.ECR_REPOSITORY }}/client:latest .
         working-directory: ECommerce-Website/client
+
+      - name: Push Docker image
+        run: docker push ${{ secrets.ECR_REPOSITORY }}/client:latest
+        working-directory: ECommerce-Website/client  
+  
