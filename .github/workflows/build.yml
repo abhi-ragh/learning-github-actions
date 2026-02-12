@@ -57,6 +57,16 @@ jobs:
         run: docker build -t ${{ secrets.ECR_REPOSITORY }}/client:latest .
         working-directory: ECommerce-Website/client
 
+      - name: Run Trivy vulnerability scanner on Client
+        uses: aquasecurity/trivy-action@0.33.1
+        with:
+          image-ref: '${{ secrets.ECR_REPOSITORY }}/client:latest'
+          format: 'table'
+          exit-code: '1'
+          ignore-unfixed: true
+          vuln-type: 'os,library'
+          severity: 'CRITICAL,HIGH'
+
       - name: Push Client Docker image
         run: docker push ${{ secrets.ECR_REPOSITORY }}/client:latest
         working-directory: ECommerce-Website/client  
@@ -64,6 +74,16 @@ jobs:
       - name: Build Server Docker image
         run: docker build -t ${{ secrets.ECR_REPOSITORY }}/server:latest .
         working-directory: ECommerce-Website/server
+
+      - name: Run Trivy vulnerability scanner on Server Image
+        uses: aquasecurity/trivy-action@0.33.1
+        with:
+          image-ref: '${{ secrets.ECR_REPOSITORY }}/server:latest'
+          format: 'table'
+          exit-code: '1'
+          ignore-unfixed: true
+          vuln-type: 'os,library'
+          severity: 'CRITICAL,HIGH'
 
       - name: Push Server Docker image
         run: docker push ${{ secrets.ECR_REPOSITORY }}/server:latest
